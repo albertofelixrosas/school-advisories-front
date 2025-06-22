@@ -1,0 +1,22 @@
+.academic-period__form-header {
+  display: grid;
+  width: 100%;
+  gap: 16px;
+  grid-template-columns: 1fr 180px;
+  padding-bottom: 28px;
+}
+
+.academic-period__form {
+  display: grid;
+  grid-template-columns: 1fr 110px;
+  gap: 16px;
+}
+
+.form__input-text {
+  padding: 10px 24px;
+  font-size: 18px;
+  border-radius: 8px;
+  border: none;
+  background-color: #cce2f0;
+}
+
