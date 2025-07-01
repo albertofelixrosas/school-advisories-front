@@ -18,7 +18,12 @@ p {
   margin: 0;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   margin: 0;
 }
 
@@ -117,8 +122,6 @@ h1, h2, h3, h4, h5, h6 {
   background-color: #c0dced;
 }
 
-
-
 .meet-page__header-section {
   display: flex;
   align-items: center;
@@ -144,7 +147,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .meet-card {
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1), 0 3px 3px rgba(0, 0, 0, 0.05);
+  box-shadow:
+    0 3px 10px rgba(0, 0, 0, 0.1),
+    0 3px 3px rgba(0, 0, 0, 0.05);
+  display: grid;
+  grid-template-rows: auto 1fr;
 }
 
 .meet-card__header {
@@ -173,6 +180,7 @@ h1, h2, h3, h4, h5, h6 {
 .meet-card__body {
   background-color: #f5f5f5;
   padding: 22px;
+  height: auto;
 }
 
 .meet-card__body-datetime {
@@ -187,10 +195,54 @@ h1, h2, h3, h4, h5, h6 {
   height: 35px;
 }
 
+.meet-card__body-description {
+  margin: 0;
+}
+
+.meet-card__body-label {
+  font-weight: 500;
+}
+
 .meet-card__body-buttons {
   display: flex;
   justify-content: space-between;
   padding-top: 20px;
+}
+
+.meet-card__body-participants {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 12px;
+  height: 284px;
+  
+  overflow-y: scroll;
+}
+
+.meet-card__body-participant {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border-radius: 8px;
+  padding: 12px;
+  margin-right: 8px;
+  gap: 2px;
+}
+
+.meet-card__body-participant-data-item {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 1px 8px;
+  border: 1px solid white;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color ease-in 0.2s, border ease-in 0.2s;
+}
+
+.meet-card__body-participant-data-item:hover {
+  border: 1px solid rgba(0, 109, 182, 0.5);
+  background-color: rgba(0, 109, 182, 0.15);
 }
 
 .meet-card__body-button {

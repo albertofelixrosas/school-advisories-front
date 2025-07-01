@@ -1,9 +1,9 @@
 import { useState } from 'react';
 
-import '../components/Login/Login.css';
-import itsonImage from '../assets/images/card-image.png';
-import prototypeImage from '../assets/images/prototype.png';
-import { useLogin } from '../hooks/useLogin';
+import '../../components/Login/Login.css';
+import itsonImage from '../../assets/images/card-image.png';
+import prototypeImage from '../../assets/images/prototype.png';
+import { useLogin } from '../../hooks/useLogin';
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
