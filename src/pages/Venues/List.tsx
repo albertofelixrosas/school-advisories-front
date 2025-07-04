@@ -9,37 +9,23 @@ import type { Venue } from '../../types/venue';
 import { useNavigate } from 'react-router';
 import { getVenues, deleteVenue } from '../../services/venueService';
 import toast from 'react-hot-toast';
+import { useVenues } from '../../hooks/useVenues';
+import Pagination from '../../components/UI/Pagination';
 
 export default function Venues() {
   const [showDeleteVenueModal, setShowDeleteVenueModal] = useState(false);
-  const [venues, setVenues] = useState<Venue[]>([]);
   const [selectedVenueId, setSelectedVenueId] = useState<number | null>(null);
-  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    fetchVenues();
-  }, []);
-
-  const fetchVenues = async () => {
-    setLoading(true);
-    try {
-      const venues = await getVenues();
-      /*
-        const res = await api.get('/venues', {
-          params: {
-            page: 1,
-            limit: 10,
-          },
-        });
-        */
-      setVenues(venues);
-    } catch (err) {
-      console.error('Error al obtener venues:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const {
+    data: venues,
+    page,
+    setPage,
+    lastPage,
+    total,
+    loading,
+    setFilters,
+    reload,
+  } = useVenues({ limit: 5 });
 
   const handleOnDeleteVenueIcon = (id: number) => {
     setShowDeleteVenueModal(true);
@@ -50,7 +36,7 @@ export default function Venues() {
     try {
       await deleteVenue(selectedVenueId || 0);
       toast.success('¡Se ha logrado eliminar el lugar para asesorias!');
-      fetchVenues();
+      reload();
     } catch (error) {
       if (error instanceof Error) {
         toast.error('No se logró eliminar el lugar para asesorias');
@@ -191,17 +177,7 @@ export default function Venues() {
               </tbody>
             </table>
           </div>
-          <div className="pagination">
-            <div className="pagination__buttons">
-              <button className="pagination__button ">Anterior</button>
-
-              <button className="pagination__button pagination__button--active">1</button>
-              <button className="pagination__button">2</button>
-              <button className="pagination__button">3</button>
-
-              <button className="pagination__button">Siguiente</button>
-            </div>
-          </div>
+          <Pagination page={page} lastPage={lastPage} total={total} onPageChange={setPage} />
         </>
       )}
       <Modal
