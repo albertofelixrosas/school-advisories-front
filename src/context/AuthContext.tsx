@@ -4,9 +4,10 @@ import { setAuthToken, setLogoutCallback } from '../api/axios';
 interface AuthContextType {
   token: string | null;
   refreshToken: string | null;
-  login: (token: string, refreshToken: string) => void;
+  login: (token: string, refreshToken: string, username: string) => void;
   logout: () => void;
   isAuthenticated: boolean;
+  username: string | null;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -16,13 +17,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [refreshToken, setRefreshToken] = useState<string | null>(() =>
     localStorage.getItem('refresh_token'),
   );
+  const [username, setUsername] = useState<string | null>(null);
 
-  const login = (accessToken: string, newRefreshToken: string) => {
+  const login = (accessToken: string, newRefreshToken: string, username: string) => {
     localStorage.setItem('token', accessToken);
     localStorage.setItem('refresh_token', newRefreshToken);
+    localStorage.setItem('username', username);
     setToken(accessToken);
     setRefreshToken(newRefreshToken);
     setAuthToken(accessToken);
+    setUsername(username);
   };
 
   const logout = () => {
@@ -49,7 +53,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, [token]);
 
   return (
-    <AuthContext.Provider value={{ token, refreshToken, login, logout, isAuthenticated }}>
+    <AuthContext.Provider value={{ token, refreshToken, login, logout, isAuthenticated, username }}>
       {children}
     </AuthContext.Provider>
   );

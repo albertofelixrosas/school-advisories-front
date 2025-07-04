@@ -13,8 +13,8 @@ export const useLogin = () => {
   const login = async (credentials: LoginRequest) => {
     setLoading(true);
     try {
-      const { access_token, refresh_token } = await loginRequest(credentials);
-      authLogin(access_token, refresh_token);
+      const { access_token, refresh_token, username } = await loginRequest(credentials);
+      authLogin(access_token, refresh_token, username);
       navigate('/');
     } catch (error) {
       console.error('Error en login:', error);
