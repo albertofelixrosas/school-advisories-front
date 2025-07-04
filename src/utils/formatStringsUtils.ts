@@ -10,3 +10,20 @@ export const formatPhoneNumber = (phoneNumber: string) => {
     return phoneNumber;
   }
 };
+
+export function capitalizeEachWord(input: string) {
+  // Split the string into an array of words
+  const words = input.split(' ');
+
+  // Map over each word to capitalize its first letter
+  const capitalizedWords = words.map(word => {
+    if (word.length === 0) {
+      return ''; // Handle empty strings if present in the split array
+    }
+    // Capitalize the first letter and concatenate with the rest of the word
+    return word.charAt(0).toUpperCase() + word.slice(1);
+  });
+
+  // Join the capitalized words back into a single string
+  return capitalizedWords.join(' ');
+}

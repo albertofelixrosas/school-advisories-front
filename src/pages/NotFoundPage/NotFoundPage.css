@@ -6,6 +6,10 @@
   color: #333;
 }
 
+.not-found--max-height {
+  height: 100%;
+}
+
 .not-found--padding-top {
   padding-top: 16px;
 }
