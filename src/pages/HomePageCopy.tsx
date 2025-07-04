@@ -34,12 +34,12 @@ export default function HomePageCopy() {
         <div className="page__direct-access">Calendario Academico</div>
         <div className="page__direct-access">Directorio</div>
       </div>
-      <div className="meet-page__header-section">
+      <div className="page__header-section">
         <h3 className="page__title--gray">Proximas Reuniones...</h3>
-        <div className="meet-page__meet-options">
-          <button className="meet-page__meet-option button button--ghost">Modo Calendario</button>
+        <div className="page__actions">
+          <button className="page__action button button--ghost">Modo Calendario</button>
           <button
-            className="meet-page__meet-option button"
+            className="page__action button"
             onClick={e => {
               setShowModal(true);
             }}

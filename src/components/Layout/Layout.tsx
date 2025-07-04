@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import './Layout.css';
-
+import '../../styles/global.css';
 import Header from '../Header/Header';
 import SideMenu from '../SideMenu/SideMenu';
 import { Outlet } from 'react-router';

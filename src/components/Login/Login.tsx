@@ -1,6 +1,6 @@
 import './Login.css';
 import itsonImage from './assets/images/card-image.png';
-import prototypeImage from './assets/images/prototype.png';
+import prototypeImage from './assets/images/itson-logo.png';
 
 function Login() {
   return (

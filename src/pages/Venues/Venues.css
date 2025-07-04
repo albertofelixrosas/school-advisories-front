@@ -1,0 +1,28 @@
+/* Anchos mínimos por columna */
+.table__cell--id {
+  width: 60px;
+}
+
+.table__cell--name {
+  
+}
+
+.table__cell--type {
+  width: 150px;
+}
+
+.table__cell--link {
+  width: 130px;
+}
+
+.table__cell--building {
+  width: 180px;
+}
+
+.table__cell--floor {
+  width: 140px;
+}
+
+.table__cell--actions-header {
+  width: 100px;
+}

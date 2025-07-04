@@ -1,8 +1,10 @@
 .layout {
   background-color: white;
-  width: 100dvw;
-  height: 100dvh;
-  display: flex;
+  min-height: max-content;
+  height: 100dvh; /* Altura completa de la ventana */
+  max-width: 100dvw; /* Ancho completo de la ventana */
+  overflow-x: hidden; /* Evita el scroll horizontal */
+  display: grid;
   transition: all 0.3s ease;
   position: relative;
   z-index: 2;
@@ -43,7 +45,8 @@
 .main-content {
   flex: 1;
   transition: none;
-  overflow-y: scroll;
+  display: grid;
+  grid-template-rows: auto 1fr;
 }
 
 /*SCROLL BAR */
