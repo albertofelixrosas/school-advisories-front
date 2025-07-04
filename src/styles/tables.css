@@ -131,3 +131,11 @@
   font-weight: bold;
   border-color: #006db6;
 }
+
+.pagination__button--active:hover {
+  cursor: default;
+  background-color: #006db6;
+  color: white;
+  font-weight: bold;
+  border-color: #006db6;
+}
