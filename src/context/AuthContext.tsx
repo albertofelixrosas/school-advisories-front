@@ -1,6 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { setAuthToken, setLogoutCallback } from '../api/axios';
-// import { useNavigate } from 'react-router';
 
 interface AuthContextType {
   token: string | null;

@@ -1,53 +1,71 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Modal from '../../components/UI/Modal';
 import '../../styles/tables.css';
 import './Venues.css';
-
-const VENUES_EXAMPLE = [
-  {
-    id: 1,
-    name: 'Aula 101',
-    type: 'classroom',
-    url: null,
-    building: 'Edificio A',
-    floor: 'Planta baja',
-  },
-  {
-    id: 2,
-    name: 'Cubículo 202',
-    type: 'office',
-    url: null,
-    building: 'Edificio B',
-    floor: 'Segundo piso',
-  },
-  {
-    id: 3,
-    name: 'Sala de reuniones virtual',
-    type: 'virtual',
-    url: 'https://meet.example.com/room123',
-    building: null,
-    floor: null,
-  },
-  {
-    id: 4,
-    name: 'Aula 103',
-    type: 'classroom',
-    url: null,
-    building: 'Edificio A',
-    floor: 'Primer piso',
-  },
-  {
-    id: 5,
-    name: 'Cubículo 205',
-    type: 'office',
-    url: null,
-    building: 'Edificio B',
-    floor: 'Tercer piso',
-  },
-];
+import { BiShowAlt } from 'react-icons/bi';
+import { FaEdit } from 'react-icons/fa';
+import { IoIosRemoveCircle } from 'react-icons/io';
+import type { Venue } from '../../types/venue';
+import { useNavigate } from 'react-router';
+import { getVenues, deleteVenue } from '../../services/venueService';
+import toast from 'react-hot-toast';
 
 export default function Venues() {
-  const [showModal, setShowModal] = useState(false);
+  const [showDeleteVenueModal, setShowDeleteVenueModal] = useState(false);
+  const [venues, setVenues] = useState<Venue[]>([]);
+  const [selectedVenueId, setSelectedVenueId] = useState<number | null>(null);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchVenues();
+  }, []);
+
+  const fetchVenues = async () => {
+    setLoading(true);
+    try {
+      const venues = await getVenues();
+      /*
+        const res = await api.get('/venues', {
+          params: {
+            page: 1,
+            limit: 10,
+          },
+        });
+        */
+      setVenues(venues);
+    } catch (err) {
+      console.error('Error al obtener venues:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleOnDeleteVenueIcon = (id: number) => {
+    setShowDeleteVenueModal(true);
+    setSelectedVenueId(id);
+  };
+
+  const handleOnDeleteVenue = async () => {
+    try {
+      await deleteVenue(selectedVenueId || 0);
+      toast.success('¡Se ha logrado eliminar el lugar para asesorias!');
+      fetchVenues();
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error('No se logró eliminar el lugar para asesorias');
+        console.error(error.message);
+      }
+    }
+  };
+
+  const handleOnShowVenue = (id: number) => {
+    navigate(`/venues/${id}`);
+  };
+
+  const handleOnEditVenue = (id: number) => {
+    navigate(`/venues/${id}/edit`);
+  };
 
   return (
     <div className="page">
@@ -64,14 +82,15 @@ export default function Venues() {
           <button
             className="page__action button"
             onClick={() => {
-              setShowModal(true);
+              // setShowModal(true);
+              navigate('/venues/create');
             }}
           >
             + Nuevo lugar
           </button>
         </div>
       </div>
-      {VENUES_EXAMPLE.length === 0 && (
+      {venues.length === 0 && loading === false && (
         <div className="not-found not-found--padding-top">
           <div className="not-found__card">
             <p className="not-found__title">No hay lugares registrados</p>
@@ -82,23 +101,24 @@ export default function Venues() {
           </div>
         </div>
       )}
-      {VENUES_EXAMPLE.length > 0 && (
+      {venues.length > 0 && loading === false && (
         <>
           <div className="table-container">
             <table className="table table--venues">
               <thead className="table__head">
                 <tr className="table__row--head">
-                  <th className="table__cell table__cell--head table__cell--id">ID</th>
                   <th className="table__cell table__cell--head table__cell--name">Nombre</th>
                   <th className="table__cell table__cell--head table__cell--type">Tipo</th>
                   <th className="table__cell table__cell--head table__cell--link">Enlace</th>
                   <th className="table__cell table__cell--head table__cell--building">Edificio</th>
                   <th className="table__cell table__cell--head table__cell--floor">Piso</th>
-                  <th className="table__cell table__cell--head table__cell--actions-header">Acciones</th>
+                  <th className="table__cell table__cell--head table__cell--actions-header">
+                    Acciones
+                  </th>
                 </tr>
               </thead>
               <tbody className="table__body">
-                {VENUES_EXAMPLE.map(venue => {
+                {venues.map(venue => {
                   let typeCSSStyle = '';
                   const { type } = venue;
                   if (type === 'classroom') {
@@ -119,8 +139,7 @@ export default function Venues() {
                   }
 
                   return (
-                    <tr className="table__row" key={venue.id}>
-                      <td className="table__cell">{venue.id}</td>
+                    <tr className="table__row" key={venue.venue_id}>
                       <td className="table__cell">{venue.name}</td>
                       <td className="table__cell">
                         <div className="table__cell--state-container">
@@ -140,8 +159,30 @@ export default function Venues() {
                       <td className="table__cell">{venue.floor || 'N/A'}</td>
                       <td className="table__cell">
                         <div className="table__cell--actions">
-                          <span className="table__cell--action">Editar</span>
-                          <span className="table__cell--action">Eliminar</span>
+                          <span
+                            className="table__cell--action"
+                            onClick={() => {
+                              handleOnShowVenue(venue.venue_id);
+                            }}
+                          >
+                            <BiShowAlt size={30} color="black" />
+                          </span>
+                          <span
+                            className="table__cell--action"
+                            onClick={() => {
+                              handleOnEditVenue(venue.venue_id);
+                            }}
+                          >
+                            <FaEdit size={30} />
+                          </span>
+                          <span
+                            className="table__cell--action"
+                            onClick={() => {
+                              handleOnDeleteVenueIcon(venue.venue_id);
+                            }}
+                          >
+                            <IoIosRemoveCircle size={30} color="#B22F10" />
+                          </span>
                         </div>
                       </td>
                     </tr>
@@ -152,9 +193,7 @@ export default function Venues() {
           </div>
           <div className="pagination">
             <div className="pagination__buttons">
-              <button className="pagination__button" disabled>
-                Anterior
-              </button>
+              <button className="pagination__button ">Anterior</button>
 
               <button className="pagination__button pagination__button--active">1</button>
               <button className="pagination__button">2</button>
@@ -166,15 +205,47 @@ export default function Venues() {
         </>
       )}
       <Modal
-        title="Nuevo Periodo"
+        title="¿Seguro que desea eliminar este lugar?"
         children={
-          <div>
-            <p>Lorem, ipsum.</p>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              padding: '32px',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <div
+              style={{
+                display: 'flex',
+                gap: '16px',
+              }}
+            >
+              <button
+                className="button"
+                onClick={() => {
+                  handleOnDeleteVenue();
+                  setShowDeleteVenueModal(false);
+                }}
+              >
+                Eliminar
+              </button>
+              <button
+                className="button button--ghost"
+                onClick={() => {
+                  setShowDeleteVenueModal(false);
+                }}
+              >
+                Cancelar
+              </button>
+            </div>
           </div>
         }
-        isOpen={showModal}
+        isOpen={showDeleteVenueModal}
         onClose={() => {
-          setShowModal(false);
+          setShowDeleteVenueModal(false);
+          setSelectedVenueId(null);
         }}
       />
     </div>

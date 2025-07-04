@@ -77,6 +77,7 @@ api.interceptors.response.use(
 
       try {
         const newAccessToken = await refreshAccessToken(refreshToken);
+        console.log({newAccessToken});
         accessToken = newAccessToken;
         setAuthToken(newAccessToken);
         localStorage.setItem('token', newAccessToken);
