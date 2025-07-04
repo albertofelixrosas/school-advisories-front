@@ -43,7 +43,7 @@ export default function ContacPage() {
               <td className="table__cell">Mayo 30, 2025</td>
               <td className="table__cell">
                 <div className="table__cell--state-container">
-                  <span className="table__cell--state table__cell--active-state">Activo</span>
+                  <span className="table__cell--state table__cell--green">Activo</span>
                 </div>
               </td>
               <td className="table__cell">
@@ -60,7 +60,7 @@ export default function ContacPage() {
               <td className="table__cell">Noviembre 30, 2025</td>
               <td className="table__cell">
                 <div className="table__cell--state-container">
-                  <span className="table__cell--state table__cell--active-state">Activo</span>
+                  <span className="table__cell--state table__cell--green">Activo</span>
                 </div>
               </td>
               <td className="table__cell">
@@ -77,7 +77,7 @@ export default function ContacPage() {
               <td className="table__cell">Mayo 30, 2025</td>
               <td className="table__cell">
                 <div className="table__cell--state-container">
-                  <span className="table__cell--state table__cell--pending-state">Planificado</span>
+                  <span className="table__cell--state table__cell--yellow">Planificado</span>
                 </div>
               </td>
               <td className="table__cell">
@@ -94,7 +94,7 @@ export default function ContacPage() {
               <td className="table__cell">Mayo 30, 2025</td>
               <td className="table__cell">
                 <div className="table__cell--state-container">
-                  <span className="table__cell--state table__cell--finish-state">Finalizado</span>
+                  <span className="table__cell--state table__cell--red">Finalizado</span>
                 </div>
               </td>
               <td className="table__cell">
@@ -106,8 +106,9 @@ export default function ContacPage() {
             </tr>
           </tbody>
         </table>
-        <div className="table__footer">
-          <div className="pagination">
+      </div>
+              <div className="pagination">
+          <div className="pagination__buttons">
             <button className="pagination__button" disabled>
               Anterior
             </button>
@@ -119,7 +120,6 @@ export default function ContacPage() {
             <button className="pagination__button">Siguiente</button>
           </div>
         </div>
-      </div>
     </section>
   );
 }

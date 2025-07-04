@@ -1,17 +1,23 @@
 .table-container {
   width: 100%;
   overflow-x: auto;
+  padding-top: 16px;
 }
 
 .table {
-  width: 100%;
+  min-width: fit-content;
   border-collapse: collapse;
-  min-width: 700px; /* Opcional: fuerza scroll horizontal en pantallas pequeñas */
+  table-layout: fixed;
+  min-width: 100%;
 }
 
 .table__head {
   background-color: #006db6;
   color: white;
+}
+
+.table__body {
+  overflow: hidden;
 }
 
 .table__row {
@@ -24,7 +30,7 @@
 }
 
 .table__cell {
-  padding: 12px 16px;
+  padding: 10px 14px;
   text-align: left;
   color: #000;
 }
@@ -56,28 +62,30 @@
 
 .table__cell--state-container {
   display: flex;
-  justify-content: center;
+  justify-content: start;
 }
 
 .table__cell--state {
   padding: 3px 12px;
   border-radius: 16px;
   font-weight: 500;
+  text-align: center;
+  text-wrap: nowrap;
 }
 
-.table__cell--active-state {
-  background-color: #D4EDDA;
-  color: #064C1A;
+.table__cell--green {
+  background-color: #d4edda;
+  color: #064c1a;
 }
 
-.table__cell--pending-state {
-  background-color: #FFF3CD;
+.table__cell--yellow {
+  background-color: #fff3cd;
   color: #875300;
 }
 
-.table__cell--finish-state {
-  background-color: #F8D7DA;
-  color: #710C10;
+.table__cell--red {
+  background-color: #f8d7da;
+  color: #710c10;
 }
 
 .table__cell--action:hover {
@@ -86,13 +94,13 @@
 
 /* TABLE FOOTER*/
 
-.table__footer {
-  margin-top: 16px;
+.pagination {
   display: flex;
   justify-content: center;
+  padding-top: 16px;
 }
 
-.pagination {
+.pagination__buttons {
   display: flex;
   gap: 8px;
 }

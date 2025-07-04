@@ -107,10 +107,9 @@ const App = () => (
 🚀 5. Bonus: manejo de roles
 En tu contexto de autenticación puedes manejar un role y condicionar rutas:
 
-tsx
-Copiar
-Editar
+```tsx
 <Route
   path="/advisories/create"
   element={user?.role === 'teacher' ? <AdvisoryCreate /> : <Navigate to="/" />}
 />
+```

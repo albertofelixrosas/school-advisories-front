@@ -12,14 +12,14 @@
   gap: 16px;
 }
 
-.prototype {
+.logo {
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.prototype__image {
+.logo__image {
   width: 250px;
 }
 

@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import '../../components/Login/Login.css';
 import itsonImage from '../../assets/images/card-image.png';
-import prototypeImage from '../../assets/images/prototype.png';
+import logoImage from '../../assets/images/itson-logo.png';
 import { useLogin } from '../../hooks/useLogin';
 
 const LoginPage = () => {
@@ -23,11 +23,11 @@ const LoginPage = () => {
   return (
     <div className="login">
       <div className="card">
-        <div className="prototype">
-          <img className="prototype__image" src={prototypeImage} alt="SACD logo" />
+        <div className="logo">
+          <img className="logo__image" src={logoImage} alt="SACD logo" />
         </div>
 
-        <h2 className="login-form__title">Sistema de Administración</h2>
+        <h2 className="login-form__title">Sistema de asesorias en linea</h2>
         <span className="login-form__subtitle">Consejo Directivo</span>
 
         <form className="login-form" noValidate onSubmit={handleSubmit}>
