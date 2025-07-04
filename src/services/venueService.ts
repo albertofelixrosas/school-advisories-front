@@ -1,8 +1,11 @@
 import api from '../api/axios';
 import type { CreateOrUpdateVenueDto, Venue } from '../types/venue';
+import type { PaginatedResult, VenueQueryParams } from '../types/pagination';
 
-export const getVenues = async (): Promise<Venue[]> => {
-  const response = await api.get<Venue[]>("/venues");
+export const getVenues = async (params: VenueQueryParams = {}): Promise<PaginatedResult<Venue>> => {
+  const response = await api.get<PaginatedResult<Venue>>('/venues', {
+    params,
+  });
   return response.data;
 };
 
@@ -12,7 +15,7 @@ export const getVenueById = async (id: number): Promise<Venue> => {
 };
 
 export const createVenue = async (data: CreateOrUpdateVenueDto): Promise<Venue> => {
-  const response = await api.post<Venue>("/venues", data);
+  const response = await api.post<Venue>('/venues', data);
   return response.data;
 };
 
