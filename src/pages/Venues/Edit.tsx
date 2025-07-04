@@ -41,7 +41,8 @@ const EditVenue = () => {
     e.preventDefault();
     try {
       const venue = createVenueJSON();
-      await editVenue(venue);
+      const { venue_id, ...rest } = venue;
+      await editVenue(venue_id, rest);
       navigate('/venues');
       toast.success('¡Se ha modificado el lugar para asesorias con exito!');
       // navigate('/venues');
@@ -161,7 +162,7 @@ const EditVenue = () => {
           </div>
           <div className="form__buttons">
             <button type="submit" className="button">
-              Crear
+              Actualizar
             </button>
           </div>
         </form>

@@ -9,7 +9,7 @@ export interface Venue {
   floor?: string | null; // Floor information for physical venues
 }
 
-export interface CreateVenueDto {
+export interface CreateOrUpdateVenueDto {
   name: string;
   type: VenueType;
   url?: string | null;

@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router';
 
 import { useState } from 'react';
 import '../../styles/forms.css';
-import type { CreateVenueDto } from '../../types/venue';
+import type { CreateOrUpdateVenueDto } from '../../types/venue';
 import { createVenue } from '../../services/venueService';
 import toast from 'react-hot-toast';
 
@@ -28,7 +28,7 @@ const CreateVenue = () => {
     }
   };
 
-  const createVenueJSON = (): CreateVenueDto => {
+  const createVenueJSON = (): CreateOrUpdateVenueDto => {
     return {
       name,
       type,
@@ -55,7 +55,6 @@ const CreateVenue = () => {
           <button
             className="page__action button"
             onClick={() => {
-              // setShowModal(true);
               navigate('/venues');
             }}
           >
