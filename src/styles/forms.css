@@ -93,3 +93,10 @@
     gap: 8px 16px;
   }
 }
+
+@media screen and (min-width: 1200px) {
+  .form--small-width {
+    width: 75%;
+    justify-self: center;
+  }
+}

@@ -5,7 +5,7 @@
   max-width: 100dvw; /* Ancho completo de la ventana */
   overflow-x: hidden; /* Evita el scroll horizontal */
   display: grid;
-  transition: all 0.3s ease;
+  /* transition: transform 0.3s ease; */
   position: relative;
   z-index: 2;
 }
