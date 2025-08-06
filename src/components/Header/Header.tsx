@@ -11,16 +11,15 @@ interface HeaderProps {
 }
 
 export default function Header({ onMenuClick, active }: HeaderProps) {
-  const { logout, username } = useAuth();
+  const { logout, name, lastName } = useAuth();
+
+  const fullName = name && lastName ? `${name} ${lastName}` : '';
+  const capitalizeName = capitalizeEachWord(fullName);
 
   let firstLetter = '';
-  let finalUsername = '';
 
-  if (username !== null) {
-    firstLetter = username[0].toUpperCase();
-  }
-  if (username !== null) {
-    finalUsername = capitalizeEachWord(username);
+  if (capitalizeName.length > 0) {
+    firstLetter = capitalizeName[0].toUpperCase();
   }
 
   return (
@@ -42,7 +41,7 @@ export default function Header({ onMenuClick, active }: HeaderProps) {
         }}
       >
         <IoIosNotifications color="#FFFFFF" size={20} />
-        <div className="main-header__profile-name">{finalUsername}</div>
+        <div className="main-header__profile-name">{capitalizeName}</div>
         <div className="main-header__profile-name-circle">{firstLetter}</div>
       </div>
     </header>

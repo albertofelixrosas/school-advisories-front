@@ -1,13 +1,16 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { setAuthToken, setLogoutCallback } from '../api/axios';
+import type { LoginResponse } from '../types/auth';
 
 interface AuthContextType {
   token: string | null;
   refreshToken: string | null;
-  login: (token: string, refreshToken: string, username: string) => void;
+  login: (data: LoginResponse) => void;
   logout: () => void;
   isAuthenticated: boolean;
   username: string | null;
+  name: string | null;
+  lastName: string | null;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -18,15 +21,30 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     localStorage.getItem('refresh_token'),
   );
   const [username, setUsername] = useState<string | null>(null);
+  const [name, setName] = useState<string | null>(null);
+  const [lastName, setLastName] = useState<string | null>(null);
 
-  const login = (accessToken: string, newRefreshToken: string, username: string) => {
+  const login = (data: LoginResponse) => {
+    const {
+      access_token: accessToken,
+      refresh_token: newRefreshToken,
+      username,
+      name,
+      last_name,
+      photo_url,
+    } = data;
     localStorage.setItem('token', accessToken);
     localStorage.setItem('refresh_token', newRefreshToken);
     localStorage.setItem('username', username);
+    localStorage.setItem('name', name);
+    localStorage.setItem('last_name', last_name);
+    localStorage.setItem('photo_url', photo_url);
     setToken(accessToken);
     setRefreshToken(newRefreshToken);
     setAuthToken(accessToken);
     setUsername(username);
+    setName(name);
+    setLastName(last_name);
   };
 
   const logout = () => {
@@ -53,7 +71,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, [token]);
 
   return (
-    <AuthContext.Provider value={{ token, refreshToken, login, logout, isAuthenticated, username }}>
+    <AuthContext.Provider
+      value={{ token, refreshToken, login, logout, isAuthenticated, username, name, lastName }}
+    >
       {children}
     </AuthContext.Provider>
   );
