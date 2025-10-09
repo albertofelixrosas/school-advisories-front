@@ -25,7 +25,7 @@ export const registerSchema = z
       .refine((email) => email.endsWith("@itson.edu.mx") || email.endsWith("@gmail.com"), {
         message: "Debe usar un correo institucional (@itson.edu.mx) o Gmail",
       }),
-    role: z.enum(["student", "teacher", "admin"], {
+    role: z.enum(["student", "professor", "admin"], {
       message: "Debe seleccionar un tipo de usuario",
     }),
     password: z

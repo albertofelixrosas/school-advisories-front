@@ -26,7 +26,7 @@ export default function HomePage() {
             path: "/appointments",
           },
         ]
-      case "teacher":
+      case "professor":
         return [
           {
             title: "Mis Materias",
@@ -55,7 +55,7 @@ export default function HomePage() {
       </Typography>
       <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
         {user?.role === "student" && "Encuentra y agenda asesorías con tus profesores"}
-        {user?.role === "teacher" && "Gestiona tus materias y horarios de asesoría"}
+        {user?.role === "professor" && "Gestiona tus materias y horarios de asesoría"}
         {user?.role === "admin" && "Panel de administración del sistema"}
       </Typography>
 

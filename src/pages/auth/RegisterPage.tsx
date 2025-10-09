@@ -55,7 +55,7 @@ export default function RegisterPage() {
       setError(null)
       await registerUser(data.email, data.password, data.name, data.role)
       navigate("/home")
-    } catch (err) {
+    } catch {
       setError("Error al crear la cuenta. Por favor intenta nuevamente.")
     }
   }
@@ -64,7 +64,7 @@ export default function RegisterPage() {
     switch (role) {
       case "student":
         return <School />
-      case "teacher":
+      case "professor":
         return <Work />
       case "admin":
         return <AdminPanelSettings />
@@ -77,7 +77,7 @@ export default function RegisterPage() {
     switch (role) {
       case "student":
         return "Busca y agenda asesorías con profesores"
-      case "teacher":
+      case "professor":
         return "Ofrece asesorías y gestiona tu horario"
       case "admin":
         return "Administra el sistema completo"
@@ -180,9 +180,9 @@ export default function RegisterPage() {
                         Estudiante
                       </Box>
                     </MenuItem>
-                    <MenuItem value="teacher">
+                                        <MenuItem value="professor">
                       <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                        <Work fontSize="small" />
+                        <School color="primary" />
                         Profesor
                       </Box>
                     </MenuItem>

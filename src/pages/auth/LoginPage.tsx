@@ -42,9 +42,9 @@ export default function LoginPage() {
   const onSubmit = async (data: LoginFormData) => {
     try {
       setError(null)
-      await login(data.email, data.password)
+      await login({ username: data.email, password: data.password })
       navigate("/home")
-    } catch (err) {
+    } catch {
       setError("Credenciales inválidas. Por favor verifica tu correo y contraseña.")
     }
   }

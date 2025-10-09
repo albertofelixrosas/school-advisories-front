@@ -1,4 +1,14 @@
-export interface User {
+// Re-export nuevos tipos de user
+export type { User, UserRole } from './user.types'
+// Re-export tipos de auth
+export type { LoginDto, AuthError, AuthState } from './auth.types'
+// Re-export tipos de API
+export type { ApiResponse } from './api.types'
+
+import type { User } from './user.types'
+
+// Mantener compatibilidad temporal
+export interface LegacyUser {
   id: string
   email: string
   name: string
