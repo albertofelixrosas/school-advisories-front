@@ -22,6 +22,12 @@ import ProfilePage from "../pages/protected/ProfilePage"
 import SubjectsPage from "../pages/protected/SubjectsPage"
 import SchedulesPage from "../pages/protected/SchedulesPage"
 
+// Professor pages
+import ProfessorDashboard from "../pages/professor/ProfessorDashboard"
+import ProfessorAdvisoriesPage from "../pages/professor/ProfessorAdvisoriesPage"
+import CreateAdvisoryPage from "../pages/professor/CreateAdvisoryPage"
+import AdvisoryDatesPage from "../pages/professor/AdvisoryDatesPage"
+
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, isLoading } = useAuth()
 
@@ -63,6 +69,12 @@ export default function AppRoutes() {
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/subjects" element={<SubjectsPage />} />
         <Route path="/schedules" element={<SchedulesPage />} />
+
+        {/* Professor routes */}
+        <Route path="/professor/dashboard" element={<ProfessorDashboard />} />
+        <Route path="/professor/advisories" element={<ProfessorAdvisoriesPage />} />
+        <Route path="/professor/create-advisory" element={<CreateAdvisoryPage />} />
+        <Route path="/professor/advisory-dates/:advisoryId" element={<AdvisoryDatesPage />} />
       </Route>
 
       {/* Catch all */}

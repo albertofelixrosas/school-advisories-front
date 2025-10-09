@@ -97,7 +97,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   // Función de registro
-  const register = async (email: string, password: string, name: string, role: UserRole) => {
+  const register = async (username: string, email: string, password: string, name: string, role: UserRole) => {
     try {
       setError(null)
       setIsLoading(true)
@@ -105,7 +105,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       // TODO: Implementar llamada real al backend
       const mockUser: User = {
         user_id: Date.now(), // ID temporal
-        username: email.split('@')[0],
+        username,
         name: name.split(' ')[0] || name,
         last_name: name.split(' ').slice(1).join(' ') || "Apellido",
         email,
@@ -119,7 +119,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         subjectsCount: role === "professor" ? 0 : undefined
       }
 
-      console.log("Registered user:", { email, password, name, role })
+      console.log("Registered user:", { username, email, password, name, role })
       
       setUser(mockUser)
       localStorage.setItem("user", JSON.stringify(mockUser))

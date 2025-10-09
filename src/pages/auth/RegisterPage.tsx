@@ -41,6 +41,7 @@ export default function RegisterPage() {
     resolver: zodResolver(registerSchema),
     defaultValues: {
       name: "",
+      username: "",
       email: "",
       role: "student",
       password: "",
@@ -53,7 +54,7 @@ export default function RegisterPage() {
   const onSubmit = async (data: RegisterFormData) => {
     try {
       setError(null)
-      await registerUser(data.email, data.password, data.name, data.role)
+      await registerUser(data.username, data.email, data.password, data.name, data.role)
       navigate("/home")
     } catch {
       setError("Error al crear la cuenta. Por favor intenta nuevamente.")
@@ -128,6 +129,29 @@ export default function RegisterPage() {
                   helperText={errors.name?.message}
                   margin="normal"
                   autoFocus
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <Person color="action" />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              )}
+            />
+
+            <Controller
+              name="username"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  fullWidth
+                  label="Nombre de Usuario"
+                  error={!!errors.username}
+                  helperText={errors.username?.message || "Solo letras, números, puntos, guiones y guiones bajos"}
+                  margin="normal"
+                  autoComplete="username"
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">

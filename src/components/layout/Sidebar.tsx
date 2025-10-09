@@ -12,7 +12,7 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material"
-import { Home, CalendarMonth, School, Person, MenuBook, Schedule, AdminPanelSettings } from "@mui/icons-material"
+import { Home, CalendarMonth, School, Person, MenuBook, Schedule, AdminPanelSettings, Dashboard, Event } from "@mui/icons-material"
 import { useNavigate, useLocation } from "react-router-dom"
 import { useAuth } from "../../hooks/useAuth"
 
@@ -37,6 +37,11 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
     { text: "Profesores", icon: <Person />, path: "/teachers", roles: ["student", "admin"] },
     { text: "Mis Materias", icon: <MenuBook />, path: "/subjects", roles: ["teacher"] },
     { text: "Mi Horario", icon: <Schedule />, path: "/schedules", roles: ["teacher"] },
+    
+    // Professor-specific menu items
+    { text: "Dashboard Profesor", icon: <Dashboard />, path: "/professor/dashboard", roles: ["teacher"] },
+    { text: "Mis Asesorías", icon: <Event />, path: "/professor/advisories", roles: ["teacher"] },
+    
     { text: "Administración", icon: <AdminPanelSettings />, path: "/admin", roles: ["admin"] },
   ]
 

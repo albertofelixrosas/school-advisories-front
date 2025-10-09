@@ -16,7 +16,7 @@ import {
   Alert,
   CircularProgress,
 } from "@mui/material"
-import { Visibility, VisibilityOff, Email, Lock } from "@mui/icons-material"
+import { Visibility, VisibilityOff, Person, Lock } from "@mui/icons-material"
 import { useState } from "react"
 import { useAuth } from "../../hooks/useAuth"
 import { loginSchema, type LoginFormData } from "../../schemas/auth.schema"
@@ -34,7 +34,7 @@ export default function LoginPage() {
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: "",
+      username: "",
       password: "",
     },
   })
@@ -42,10 +42,10 @@ export default function LoginPage() {
   const onSubmit = async (data: LoginFormData) => {
     try {
       setError(null)
-      await login({ username: data.email, password: data.password })
+      await login({ username: data.username, password: data.password })
       navigate("/home")
     } catch {
-      setError("Credenciales inválidas. Por favor verifica tu correo y contraseña.")
+      setError("Credenciales inválidas. Por favor verifica tu nombre de usuario y contraseña.")
     }
   }
 
@@ -79,23 +79,23 @@ export default function LoginPage() {
 
           <form onSubmit={handleSubmit(onSubmit)}>
             <Controller
-              name="email"
+              name="username"
               control={control}
               render={({ field }) => (
                 <TextField
                   {...field}
                   fullWidth
-                  label="Correo Electrónico"
-                  type="email"
-                  error={!!errors.email}
-                  helperText={errors.email?.message}
+                  label="Nombre de Usuario"
+                  type="text"
+                  error={!!errors.username}
+                  helperText={errors.username?.message}
                   margin="normal"
-                  autoComplete="email"
+                  autoComplete="username"
                   autoFocus
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
-                        <Email color="action" />
+                        <Person color="action" />
                       </InputAdornment>
                     ),
                   }}

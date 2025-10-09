@@ -1,24 +1,8 @@
 import { apiClient } from './api.client'
-import type { Advisory } from './advisories.service'
-import type { Venue } from './venues.service'
-
-export interface AdvisoryDate {
-  advisory_date_id: number
-  advisory_id: number
-  venue_id: number
-  topic: string
-  date: string // ISO 8601 date string
-  advisory: Advisory
-  venue: Venue
-}
-
-export interface CreateAdvisoryDateDto {
-  advisory_id: number
-  venue_id: number
-  topic: string
-  date: string // ISO 8601 date string
-  student_ids?: number[]
-}
+import type { 
+  AdvisoryDate, 
+  CreateAdvisoryDateDto 
+} from '../types/backend.types'
 
 export interface UpdateAdvisoryDateDto {
   advisory_id?: number

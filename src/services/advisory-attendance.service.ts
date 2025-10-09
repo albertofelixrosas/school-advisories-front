@@ -1,6 +1,6 @@
 import { apiClient } from './api.client'
 import type { User } from '../types/user.types'
-import type { AdvisoryDate } from './advisory-dates.service'
+import type { AdvisoryDate } from '../types/backend.types'
 
 export interface AdvisoryAttendance {
   advisory_attendance_id: number

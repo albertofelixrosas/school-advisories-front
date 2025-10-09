@@ -13,7 +13,7 @@ export interface AuthContextType {
   
   // Métodos
   login: (credentials: LoginDto) => Promise<void>
-  register: (email: string, password: string, name: string, role: UserRole) => Promise<void>
+  register: (username: string, email: string, password: string, name: string, role: UserRole) => Promise<void>
   logout: () => Promise<void>
   refreshTokens: () => Promise<void>
   clearError: () => void
