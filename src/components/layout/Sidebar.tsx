@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   Drawer,
@@ -11,48 +11,123 @@ import {
   Box,
   useMediaQuery,
   useTheme,
-} from "@mui/material"
-import { Home, CalendarMonth, School, Person, MenuBook, Schedule, AdminPanelSettings, Dashboard, Event } from "@mui/icons-material"
-import { useNavigate, useLocation } from "react-router-dom"
-import { useAuth } from "../../hooks/useAuth"
+} from "@mui/material";
+import {
+  Home,
+  CalendarMonth,
+  School,
+  Person,
+  MenuBook,
+  Schedule,
+  AdminPanelSettings,
+  Dashboard,
+  Event,
+  Assignment,
+  AccountTree,
+  Settings,
+} from "@mui/icons-material";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
 
 interface SidebarProps {
-  open: boolean
-  onClose: () => void
+  open: boolean;
+  onClose: () => void;
 }
 
-const drawerWidth = 240
+const drawerWidth = 240;
 
 export default function Sidebar({ open, onClose }: SidebarProps) {
-  const navigate = useNavigate()
-  const location = useLocation()
-  const { user } = useAuth()
-  const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { user } = useAuth();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const menuItems = [
-    { text: "Inicio", icon: <Home />, path: "/home", roles: ["student", "teacher", "admin"] },
-    { text: "Mis Citas", icon: <CalendarMonth />, path: "/appointments", roles: ["student"] },
-    { text: "Asesorías Disponibles", icon: <School />, path: "/advisories", roles: ["student"] },
-    { text: "Profesores", icon: <Person />, path: "/teachers", roles: ["student", "admin"] },
-    { text: "Mis Materias", icon: <MenuBook />, path: "/subjects", roles: ["teacher"] },
-    { text: "Mi Horario", icon: <Schedule />, path: "/schedules", roles: ["teacher"] },
-    
-    // Professor-specific menu items
-    { text: "Dashboard Profesor", icon: <Dashboard />, path: "/professor/dashboard", roles: ["teacher"] },
-    { text: "Mis Asesorías", icon: <Event />, path: "/professor/advisories", roles: ["teacher"] },
-    
-    { text: "Administración", icon: <AdminPanelSettings />, path: "/admin", roles: ["admin"] },
-  ]
+    {
+      text: "Inicio",
+      icon: <Home />,
+      path: "/home",
+      roles: ["student", "professor", "admin"],
+    },
 
-  const filteredMenuItems = menuItems.filter((item) => item.roles.includes(user?.role || "student"))
+    // Student menu items
+    {
+      text: "Mis Citas",
+      icon: <CalendarMonth />,
+      path: "/appointments",
+      roles: ["student"],
+    },
+    {
+      text: "Asesorías Disponibles",
+      icon: <School />,
+      path: "/advisories",
+      roles: ["student"],
+    },
+    {
+      text: "Profesores",
+      icon: <Person />,
+      path: "/teachers",
+      roles: ["student", "admin"],
+    },
+
+    // Professor menu items
+    {
+      text: "Dashboard Profesor",
+      icon: <Dashboard />,
+      path: "/professor/dashboard",
+      roles: ["professor"],
+    },
+    {
+      text: "Gestionar Materias",
+      icon: <MenuBook />,
+      path: "/professor/subjects",
+      roles: ["professor"],
+    },
+    {
+      text: "Mis Asesorías",
+      icon: <Event />,
+      path: "/professor/advisories",
+      roles: ["professor"],
+    },
+    {
+      text: "Mi Horario",
+      icon: <Schedule />,
+      path: "/professor/schedules",
+      roles: ["professor"],
+    },
+
+    // Admin menu items
+    {
+      text: "Panel Admin",
+      icon: <AdminPanelSettings />,
+      path: "/admin/dashboard",
+      roles: ["admin"],
+    },
+    {
+      text: "Gestión de Materias",
+      icon: <AccountTree />,
+      path: "/admin/subjects",
+      roles: ["admin"],
+    },
+    {
+      text: "Gestión de Usuarios",
+      icon: <Settings />,
+      path: "/admin/users",
+      roles: ["admin"],
+    },
+  ];
+
+  const filteredMenuItems = menuItems.filter((item) =>
+    item.roles.includes(user?.role || "student")
+  );
 
   const handleNavigation = (path: string) => {
-    navigate(path)
+    navigate(path);
     if (isMobile) {
-      onClose()
+      onClose();
     }
-  }
+  };
 
   const drawer = (
     <>
@@ -79,7 +154,10 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
               >
                 <ListItemIcon
                   sx={{
-                    color: location.pathname === item.path ? "inherit" : "text.secondary",
+                    color:
+                      location.pathname === item.path
+                        ? "inherit"
+                        : "text.secondary",
                   }}
                 >
                   {item.icon}
@@ -91,10 +169,13 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
         </List>
       </Box>
     </>
-  )
+  );
 
   return (
-    <Box component="nav" sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}>
+    <Box
+      component="nav"
+      sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+    >
       {isMobile ? (
         <Drawer
           variant="temporary"
@@ -133,5 +214,5 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
         </Drawer>
       )}
     </Box>
-  )
+  );
 }

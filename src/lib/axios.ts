@@ -11,7 +11,8 @@ const axiosInstance = axios.create({
 // Request interceptor
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("token")
+    // Usar la misma clave que usa AuthProvider
+    const token = localStorage.getItem("access_token")
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
     }
@@ -26,10 +27,10 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
+    // Solo loguear errores, no hacer logout automático
+    // El AuthProvider se encargará del manejo de sesión
     if (error.response?.status === 401) {
-      localStorage.removeItem("token")
-      localStorage.removeItem("user")
-      window.location.href = "/login"
+      console.warn("🔒 Token inválido o expirado, se requiere nueva autenticación")
     }
     return Promise.reject(error)
   },

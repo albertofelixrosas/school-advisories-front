@@ -24,7 +24,8 @@ import {
   FormControl,
   InputLabel,
   Select,
-  MenuItem
+  MenuItem,
+  Container
 } from "@mui/material"
 import {
   Add as AddIcon,
@@ -35,6 +36,7 @@ import {
   Assignment as AssignmentIcon
 } from "@mui/icons-material"
 import { useState } from "react"
+import { useAuth } from "../../hooks/useAuth"
 import { 
   useSubjects, 
   useSubjectDetails, 
@@ -161,6 +163,8 @@ function AssignmentDialog({ open, onClose, onAssign, subjects }: AssignmentDialo
 }
 
 export default function AdminSubjectsPage() {
+  // Hooks deben ir al inicio
+  const { user } = useAuth()
   const [subjectDialog, setSubjectDialog] = useState<{ open: boolean; subject?: Subject }>({ open: false })
   const [assignmentDialog, setAssignmentDialog] = useState(false)
   
@@ -172,6 +176,17 @@ export default function AdminSubjectsPage() {
   const deleteSubjectMutation = useDeleteSubject()
   const createAssignmentMutation = useCreateSubjectDetail()
   const deleteAssignmentMutation = useDeleteSubjectDetail()
+
+  // Verificar que el usuario es administrador
+  if (user?.role !== 'admin') {
+    return (
+      <Container maxWidth="lg" sx={{ py: 4 }}>
+        <Alert severity="error">
+          No tienes permisos para acceder a esta página
+        </Alert>
+      </Container>
+    )
+  }
 
   const handleCreateSubject = (data: CreateSubjectDto) => {
     createSubjectMutation.mutate(data)
@@ -425,50 +440,68 @@ export default function AdminSubjectsPage() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {subjectDetails.map((assignment) => (
-                    <TableRow key={assignment.subject_detail_id} hover>
-                      <TableCell>
-                        <Box>
-                          <Typography variant="body1" sx={{ fontWeight: 500 }}>
-                            {assignment.professor.full_name} {assignment.professor.last_name}
+                  {(() => {
+                    const validAssignments = subjectDetails?.filter(assignment => 
+                      assignment.professor && assignment.professor.full_name
+                    ) || []
+
+                    if (validAssignments.length === 0) {
+                      return (
+                        <TableRow>
+                          <TableCell colSpan={5} align="center">
+                            <Typography variant="body2" color="text.secondary">
+                              No hay asignaciones profesor-materia disponibles
+                            </Typography>
+                          </TableCell>
+                        </TableRow>
+                      )
+                    }
+
+                    return validAssignments.map((assignment) => (
+                      <TableRow key={assignment.subject_detail_id} hover>
+                        <TableCell>
+                          <Box>
+                            <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                              {assignment.professor.full_name}
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary">
+                              {assignment.professor.email}
+                            </Typography>
+                          </Box>
+                        </TableCell>
+                        <TableCell>
+                          <Typography variant="body1">
+                            {assignment.subject.subject}
                           </Typography>
-                          <Typography variant="body2" color="text.secondary">
-                            {assignment.professor.email}
-                          </Typography>
-                        </Box>
-                      </TableCell>
-                      <TableCell>
-                        <Typography variant="body1">
-                          {assignment.subject.subject}
-                        </Typography>
-                      </TableCell>
-                      <TableCell align="center">
-                        <Chip
-                          size="small"
-                          label={`${assignment.schedules?.length || 0} horarios`}
-                          variant="outlined"
-                        />
-                      </TableCell>
-                      <TableCell align="center">
-                        <Chip
-                          size="small"
-                          label={`${assignment.advisories?.length || 0} asesorías`}
-                          color={assignment.advisories && assignment.advisories.length > 0 ? "success" : "default"}
-                          variant="outlined"
-                        />
-                      </TableCell>
-                      <TableCell align="right">
-                        <Tooltip title="Eliminar asignación">
-                          <IconButton
+                        </TableCell>
+                        <TableCell align="center">
+                          <Chip
                             size="small"
-                            onClick={() => handleDeleteAssignment(assignment.subject_detail_id)}
-                          >
-                            <DeleteIcon />
-                          </IconButton>
-                        </Tooltip>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                            label={`${assignment.schedules?.length || 0} horarios`}
+                            variant="outlined"
+                          />
+                        </TableCell>
+                        <TableCell align="center">
+                          <Chip
+                            size="small"
+                            label={`${assignment.advisories?.length || 0} asesorías`}
+                            color={assignment.advisories && assignment.advisories.length > 0 ? "success" : "default"}
+                            variant="outlined"
+                          />
+                        </TableCell>
+                        <TableCell align="right">
+                          <Tooltip title="Eliminar asignación">
+                            <IconButton
+                              size="small"
+                              onClick={() => handleDeleteAssignment(assignment.subject_detail_id)}
+                            >
+                              <DeleteIcon />
+                            </IconButton>
+                          </Tooltip>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  })()}
                 </TableBody>
               </Table>
             </TableContainer>

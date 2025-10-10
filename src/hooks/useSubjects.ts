@@ -7,6 +7,7 @@ import toast from "react-hot-toast"
 
 interface ApiError {
   response?: {
+    status?: number;
     data?: {
       message?: string;
     };
@@ -18,6 +19,15 @@ export function useSubjects() {
   return useQuery({
     queryKey: ["subjects"],
     queryFn: subjectsApi.getAll,
+    retry: (failureCount, error: ApiError) => {
+      // No reintentar si es error de autenticación
+      if (error?.response?.status === 401) {
+        return false
+      }
+      // Reintentar hasta 2 veces para otros errores
+      return failureCount < 2
+    },
+    staleTime: 5 * 60 * 1000, // 5 minutos
   })
 }
 
@@ -29,11 +39,20 @@ export function useMySubjects() {
     queryKey: ["subject-details", "my", user?.user_id],
     queryFn: () => {
       if (!user?.user_id) {
-        throw new Error("Usuario no autenticado")
+        return []  // Retornar array vacío en lugar de error
       }
       return subjectDetailsApi.getByProfessor(user.user_id)
     },
     enabled: !!user?.user_id && user?.role === UserRole.PROFESSOR,
+    retry: (failureCount, error: ApiError) => {
+      // No reintentar si es error de autenticación
+      if (error?.response?.status === 401) {
+        return false
+      }
+      // Reintentar hasta 2 veces para otros errores
+      return failureCount < 2
+    },
+    staleTime: 5 * 60 * 1000, // 5 minutos
   })
 }
 
@@ -42,6 +61,15 @@ export function useSubjectDetails() {
   return useQuery({
     queryKey: ["subject-details"],
     queryFn: subjectDetailsApi.getAll,
+    retry: (failureCount, error: ApiError) => {
+      // No reintentar si es error de autenticación
+      if (error?.response?.status === 401) {
+        return false
+      }
+      // Reintentar hasta 2 veces para otros errores
+      return failureCount < 2
+    },
+    staleTime: 5 * 60 * 1000, // 5 minutos
   })
 }
 

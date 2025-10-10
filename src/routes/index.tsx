@@ -25,8 +25,12 @@ import SchedulesPage from "../pages/protected/SchedulesPage"
 // Professor pages
 import ProfessorDashboard from "../pages/professor/ProfessorDashboard"
 import ProfessorAdvisoriesPage from "../pages/professor/ProfessorAdvisoriesPage"
+import ProfessorSubjectAssignmentPage from "../pages/professor/SubjectAssignmentPage"
 import CreateAdvisoryPage from "../pages/professor/CreateAdvisoryPage"
 import AdvisoryDatesPage from "../pages/professor/AdvisoryDatesPage"
+
+// Admin pages
+import AdminSubjectsPage from "../pages/admin/AdminSubjectsPage"
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, isLoading } = useAuth()
@@ -72,9 +76,16 @@ export default function AppRoutes() {
 
         {/* Professor routes */}
         <Route path="/professor/dashboard" element={<ProfessorDashboard />} />
+        <Route path="/professor/subjects" element={<ProfessorSubjectAssignmentPage />} />
         <Route path="/professor/advisories" element={<ProfessorAdvisoriesPage />} />
         <Route path="/professor/create-advisory" element={<CreateAdvisoryPage />} />
         <Route path="/professor/advisory-dates/:advisoryId" element={<AdvisoryDatesPage />} />
+        <Route path="/professor/schedules" element={<SchedulesPage />} />
+
+        {/* Admin routes */}
+        <Route path="/admin/dashboard" element={<HomePage />} />
+        <Route path="/admin/subjects" element={<AdminSubjectsPage />} />
+        <Route path="/admin/users" element={<div>Gestión de Usuarios - En desarrollo</div>} />
       </Route>
 
       {/* Catch all */}
