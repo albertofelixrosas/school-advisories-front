@@ -39,9 +39,6 @@ import {
 } from "../../hooks/useSubjects"
 import type { Subject, CreateSubjectDetailDto } from "../../api/subjects"
 
-// Importar test de conexión (solo en desarrollo)
-import "../../utils/backend-connection-test"
-
 interface AssignSubjectDialogProps {
   open: boolean;
   onClose: () => void;
