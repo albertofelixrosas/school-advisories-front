@@ -235,7 +235,7 @@ export default function SubjectsPage() {
                               <Chip
                                 key={index}
                                 size="small"
-                                label={`${formatDay(schedule.day)} ${schedule.begin_time}-${schedule.end_time}`}
+                                label={`${formatDay(schedule.day)} ${schedule.start_time}-${schedule.end_time}`}
                                 variant="outlined"
                                 color="primary"
                               />
