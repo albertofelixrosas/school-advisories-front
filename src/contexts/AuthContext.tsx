@@ -18,9 +18,6 @@ export interface AuthContextType {
   logout: () => Promise<void>
   refreshTokens: () => Promise<void>
   clearError: () => void
-  
-  // 🚀 Función para cambiar usuario de desarrollo (mantener compatibilidad)
-  switchDevelopmentUser: (role: "student" | "teacher" | "admin") => void
 }
 
 export const AuthContext = createContext<AuthContextType>({
@@ -39,5 +36,4 @@ export const AuthContext = createContext<AuthContextType>({
   logout: async () => {},
   refreshTokens: async () => {},
   clearError: () => {},
-  switchDevelopmentUser: () => {},
 })

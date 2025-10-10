@@ -11,11 +11,9 @@ import {
   Avatar,
   Menu,
   MenuItem,
-  Chip,
-  Divider,
   // useTheme as useMuiTheme,
 } from "@mui/material"
-import { Menu as MenuIcon, Brightness4, Brightness7, AccountCircle, BugReport } from "@mui/icons-material"
+import { Menu as MenuIcon, Brightness4, Brightness7, AccountCircle } from "@mui/icons-material"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useAuth } from "../../hooks/useAuth"
@@ -27,11 +25,10 @@ interface NavbarProps {
 
 export default function Navbar({ onMenuClick }: NavbarProps) {
   const navigate = useNavigate()
-  const { user, logout, switchDevelopmentUser } = useAuth()
+  const { user, logout } = useAuth()
   const { mode, toggleTheme } = useTheme()
   // const theme = useMuiTheme()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-  const [devMenuAnchor, setDevMenuAnchor] = useState<null | HTMLElement>(null)
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
@@ -52,19 +49,7 @@ export default function Navbar({ onMenuClick }: NavbarProps) {
     handleClose()
   }
 
-  // 🚀 Funciones para el menú de desarrollo
-  const handleDevMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setDevMenuAnchor(event.currentTarget)
-  }
 
-  const handleDevMenuClose = () => {
-    setDevMenuAnchor(null)
-  }
-
-  const handleSwitchUser = (role: "student" | "teacher" | "admin") => {
-    switchDevelopmentUser(role)
-    handleDevMenuClose()
-  }
 
   return (
     <AppBar
@@ -98,23 +83,6 @@ export default function Navbar({ onMenuClick }: NavbarProps) {
           </Typography>
         </Box>
 
-        {/* 🚀 Botón de desarrollo - Solo para desarrollo */}
-        <Chip
-          label="DEV"
-          size="small"
-          onClick={handleDevMenu}
-          sx={{ 
-            mr: 1, 
-            bgcolor: "warning.main", 
-            color: "warning.contrastText",
-            cursor: "pointer",
-            "&:hover": {
-              bgcolor: "warning.dark"
-            }
-          }}
-          icon={<BugReport />}
-        />
-
         <IconButton onClick={toggleTheme} color="inherit" sx={{ mr: 1 }}>
           {mode === "dark" ? <Brightness7 /> : <Brightness4 />}
         </IconButton>
@@ -140,36 +108,7 @@ export default function Navbar({ onMenuClick }: NavbarProps) {
           <MenuItem onClick={handleLogout}>Cerrar Sesión</MenuItem>
         </Menu>
 
-        {/* 🚀 Menú de desarrollo para cambiar usuarios */}
-        <Menu
-          anchorEl={devMenuAnchor}
-          open={Boolean(devMenuAnchor)}
-          onClose={handleDevMenuClose}
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "right",
-          }}
-          transformOrigin={{
-            vertical: "top",
-            horizontal: "right",
-          }}
-        >
-          <MenuItem disabled>
-            <Typography variant="subtitle2" color="text.secondary">
-              🛠️ Cambiar Usuario de Desarrollo
-            </Typography>
-          </MenuItem>
-          <Divider />
-          <MenuItem onClick={() => handleSwitchUser("student")}>
-            👨‍🎓 Ana García (Estudiante)
-          </MenuItem>
-          <MenuItem onClick={() => handleSwitchUser("teacher")}>
-            👨‍🏫 Dr. Juan Pérez (Profesor)
-          </MenuItem>
-          <MenuItem onClick={() => handleSwitchUser("admin")}>
-            👩‍💼 María Admin (Administrador)
-          </MenuItem>
-        </Menu>
+
       </Toolbar>
     </AppBar>
   )
