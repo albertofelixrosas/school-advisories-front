@@ -4,9 +4,9 @@ const getThemeOptions = (mode: "light" | "dark"): ThemeOptions => ({
   palette: {
     mode,
     primary: {
-      main: "#0A5DA6",
-      light: "#3D7FBF",
-      dark: "#074173",
+      main: mode === "dark" ? "#4A90E2" : "#0A5DA6", // Azul más claro para modo oscuro
+      light: mode === "dark" ? "#7BB3F0" : "#3D7FBF",
+      dark: mode === "dark" ? "#2E5B8C" : "#074173",
       contrastText: "#ffffff",
     },
     secondary: {
@@ -105,6 +105,25 @@ const getThemeOptions = (mode: "light" | "dark"): ThemeOptions => ({
         head: {
           fontWeight: 600,
           backgroundColor: mode === "dark" ? "#1a1a1a" : "#f5f5f5",
+        },
+      },
+    },
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          // Estilos específicos para inputs de tiempo en tema oscuro
+          '& input[type="time"]': mode === "dark" ? {
+            "&::-webkit-calendar-picker-indicator": {
+              filter: "invert(1)",
+              cursor: "pointer",
+            },
+            "&::-webkit-inner-spin-button": {
+              display: "none",
+            },
+            "&::-webkit-outer-spin-button": {
+              display: "none",
+            },
+          } : {},
         },
       },
     },
