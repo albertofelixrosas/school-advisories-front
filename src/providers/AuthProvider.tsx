@@ -150,11 +150,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         throw new Error("No refresh token available")
       }
 
-      // TODO: Implementar llamada real al backend
-      // const response = await authService.refreshToken({
-      //   username: JSON.parse(storedUser).username,
-      //   refresh_token: storedRefreshToken
-      // })
+      const user = JSON.parse(storedUser)
+      const response = await authService.refreshToken({
+        username: user.username,
+        refresh_token: storedRefreshToken
+      })
+      
+      // Actualizar token en estado
+      setToken(response.access_token)
       
       console.log("🔄 Tokens refrescados")
     } catch (err) {
