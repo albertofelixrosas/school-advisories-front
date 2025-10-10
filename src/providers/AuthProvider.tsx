@@ -61,9 +61,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setError(null)
       setIsLoading(true)
       
-      console.log('🔐 Intentando login con backend real...', credentials)
       const response = await authService.login(credentials)
-      console.log('✅ Login exitoso:', response)
       
       // Usar datos del backend
       setUser(response.user)
