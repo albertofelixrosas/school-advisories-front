@@ -1,4 +1,3 @@
-import { useState } from "react"
 import {
   Box,
   Typography,
@@ -26,40 +25,10 @@ import {
 } from "@mui/icons-material"
 import { useNavigate } from "react-router-dom"
 import { useAuth } from "../../hooks/useAuth"
+import { useDashboard } from "../../hooks/useDashboard"
+import type { Advisory, AdvisoryDate } from "../../types/auth.types"
 
-// Mock data - esto se reemplazará con hooks reales
-const mockAdvisories = [
-  {
-    advisory_id: 1,
-    max_students: 15,
-    subject_detail: {
-      subject_detail_id: 1,
-      subject_name: "Cálculo Diferencial",
-      schedules: []
-    },
-    schedules: [
-      { day: "MONDAY", begin_time: "10:00", end_time: "11:00" },
-      { day: "WEDNESDAY", begin_time: "10:00", end_time: "11:00" }
-    ]
-  }
-]
-
-const mockAdvisoryDates = [
-  {
-    advisory_date_id: 1,
-    topic: "Repaso de Derivadas",
-    date: "2025-10-15T10:00:00.000Z",
-    venue: { name: "Aula 201", type: "CLASSROOM" },
-    attendances: [{ attended: false }, { attended: false }, { attended: false }]
-  }
-]
-
-const mockStats = {
-  totalAdvisories: 3,
-  totalDates: 8,
-  totalStudents: 24,
-  upcomingDates: 5
-}
+// Utility function for date formatting
 
 const formatDate = (dateString: string) => {
   const date = new Date(dateString)
@@ -73,22 +42,30 @@ const formatDate = (dateString: string) => {
 
 export default function ProfessorDashboard() {
   const navigate = useNavigate()
-  const { user } = useAuth()
-  const [isLoading] = useState(false)
-  const [error] = useState(null)
+  const { user, isLoading } = useAuth()
+  const { 
+    professorData, 
+    professorStats, 
+    isLoaded: dashboardLoaded 
+  } = useDashboard()
 
-  if (isLoading) {
+  const isLoadingData = isLoading || !dashboardLoaded
+
+  if (isLoadingData) {
     return (
       <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: 400 }}>
         <CircularProgress />
+        <Typography variant="body1" sx={{ ml: 2 }}>
+          Cargando dashboard...
+        </Typography>
       </Box>
     )
   }
 
-  if (error) {
+  if (!professorStats) {
     return (
-      <Alert severity="error" sx={{ mb: 3 }}>
-        Error al cargar el dashboard. Por favor intenta nuevamente.
+      <Alert severity="warning" sx={{ mb: 3 }}>
+        No se pudieron cargar los datos del dashboard. Verifica tu conexión.
       </Alert>
     )
   }
@@ -122,7 +99,7 @@ export default function ProfessorDashboard() {
               </Avatar>
               <Box>
                 <Typography variant="h5" sx={{ fontWeight: 600 }}>
-                  {mockStats.totalAdvisories}
+                  {professorStats.active_advisories_count}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                   Asesorías Activas
@@ -140,7 +117,7 @@ export default function ProfessorDashboard() {
               </Avatar>
               <Box>
                 <Typography variant="h5" sx={{ fontWeight: 600 }}>
-                  {mockStats.upcomingDates}
+                  {professorStats.upcoming_sessions_count}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                   Fechas Próximas
@@ -158,7 +135,7 @@ export default function ProfessorDashboard() {
               </Avatar>
               <Box>
                 <Typography variant="h5" sx={{ fontWeight: 600 }}>
-                  {mockStats.totalStudents}
+                  {professorStats.total_students_enrolled}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                   Estudiantes Inscritos
@@ -176,10 +153,10 @@ export default function ProfessorDashboard() {
               </Avatar>
               <Box>
                 <Typography variant="h5" sx={{ fontWeight: 600 }}>
-                  {mockStats.totalDates}
+                  {professorStats.completed_sessions_count}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  Fechas Programadas
+                  Sesiones Completadas
                 </Typography>
               </Box>
             </Box>
@@ -243,32 +220,38 @@ export default function ProfessorDashboard() {
               </Box>
               
               <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                {mockAdvisories.map((advisory) => (
-                  <Paper 
-                    key={advisory.advisory_id} 
-                    sx={{ p: 2, border: 1, borderColor: "divider" }}
-                  >
-                    <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 1 }}>
-                      {advisory.subject_detail.subject_name}
-                    </Typography>
-                    <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 1 }}>
-                      <Chip
-                        size="small"
-                        label={`Max: ${advisory.max_students} estudiantes`}
-                        variant="outlined"
-                      />
-                      <Chip
-                        size="small"
-                        label={`${advisory.schedules.length} horarios`}
-                        color="primary"
-                        variant="outlined"
-                      />
-                    </Box>
-                    <Typography variant="body2" color="text.secondary">
-                      Horarios: {advisory.schedules.map(s => `${s.day} ${s.begin_time}-${s.end_time}`).join(", ")}
-                    </Typography>
-                  </Paper>
-                ))}
+                {professorData && professorData.active_advisories?.length > 0 ? (
+                  professorData.active_advisories.slice(0, 3).map((advisory: Advisory) => (
+                    <Paper 
+                      key={advisory.advisory_id || Math.random()} 
+                      sx={{ p: 2, border: 1, borderColor: "divider" }}
+                    >
+                      <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 1 }}>
+                        {advisory.subject_detail?.subject_name || advisory.subject_name || "Asesoría"}
+                      </Typography>
+                      <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 1 }}>
+                        <Chip
+                          size="small"
+                          label={`Max: ${advisory.max_students || 0} estudiantes`}
+                          variant="outlined"
+                        />
+                        <Chip
+                          size="small"
+                          label={`${advisory.schedules?.length || 0} horarios`}
+                          color="primary"
+                          variant="outlined"
+                        />
+                      </Box>
+                      <Typography variant="body2" color="text.secondary">
+                        Horarios: {advisory.schedules?.map((s) => `${s.day} ${s.begin_time}-${s.end_time}`).join(", ") || "No definido"}
+                      </Typography>
+                    </Paper>
+                  ))
+                ) : (
+                  <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'center', py: 2 }}>
+                    No hay asesorías disponibles
+                  </Typography>
+                )}
               </Box>
             </CardContent>
           </Card>
@@ -301,33 +284,43 @@ export default function ProfessorDashboard() {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {mockAdvisoryDates.map((date) => (
-                      <TableRow key={date.advisory_date_id}>
-                        <TableCell>
-                          <Typography variant="body2">
-                            {formatDate(date.date)}
-                          </Typography>
-                        </TableCell>
-                        <TableCell>
-                          <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                            {date.topic}
-                          </Typography>
-                        </TableCell>
-                        <TableCell>
-                          <Chip
-                            size="small"
-                            label={date.venue.name}
-                            color={date.venue.type === "VIRTUAL" ? "primary" : "default"}
-                            variant="outlined"
-                          />
-                        </TableCell>
-                        <TableCell align="right">
-                          <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                            {date.attendances.length}
+                    {professorData && professorData.upcoming_advisory_dates?.length > 0 ? (
+                      professorData.upcoming_advisory_dates.slice(0, 5).map((date: AdvisoryDate) => (
+                        <TableRow key={date.advisory_date_id || Math.random()}>
+                          <TableCell>
+                            <Typography variant="body2">
+                              {formatDate(date.date || date.created_at || new Date().toISOString())}
+                            </Typography>
+                          </TableCell>
+                          <TableCell>
+                            <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                              {date.topic || date.subject_name || "Sesión"}
+                            </Typography>
+                          </TableCell>
+                          <TableCell>
+                            <Chip
+                              size="small"
+                              label={date.venue?.name || date.location || "Por definir"}
+                              color={date.venue?.type === "VIRTUAL" || date.type === "VIRTUAL" ? "primary" : "default"}
+                              variant="outlined"
+                            />
+                          </TableCell>
+                          <TableCell align="right">
+                            <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                              {date.attendances?.length || date.enrolled_count || 0}
+                            </Typography>
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    ) : (
+                      <TableRow>
+                        <TableCell colSpan={4}>
+                          <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'center', py: 2 }}>
+                            No hay fechas próximas programadas
                           </Typography>
                         </TableCell>
                       </TableRow>
-                    ))}
+                    )}
                   </TableBody>
                 </Table>
               </TableContainer>

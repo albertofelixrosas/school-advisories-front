@@ -1,6 +1,6 @@
 import { createContext } from "react"
 import type { User, UserRole } from "../types/user.types"
-import type { AuthError, LoginDto } from "../types/auth.types"
+import type { AuthError, LoginDto, DashboardData } from "../types/auth.types"
 
 export interface AuthContextType {
   // Estado de autenticación
@@ -10,6 +10,7 @@ export interface AuthContextType {
   token: string | null
   refreshToken: string | null
   error: AuthError | null
+  dashboardData: DashboardData | null
   
   // Métodos
   login: (credentials: LoginDto) => Promise<void>
@@ -30,6 +31,7 @@ export const AuthContext = createContext<AuthContextType>({
   token: null,
   refreshToken: null,
   error: null,
+  dashboardData: null,
   
   // Métodos
   login: async () => {},

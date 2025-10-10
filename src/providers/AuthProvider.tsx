@@ -6,7 +6,7 @@ import { useState, useEffect } from "react"
 import toast from "react-hot-toast"
 import { AuthContext } from "../contexts"
 import type { User, UserRole } from "../types/user.types"
-import type { AuthError, LoginDto } from "../types/auth.types"
+import type { AuthError, LoginDto, DashboardData } from "../types/auth.types"
 import { authService } from "../services/auth.service"
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -16,6 +16,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [token, setToken] = useState<string | null>(null)
   const [refreshToken, setRefreshToken] = useState<string | null>(null)
   const [error, setError] = useState<AuthError | null>(null)
+  const [dashboardData, setDashboardData] = useState<DashboardData | null>(null)
   
   // Estado calculado
   const isAuthenticated = Boolean(user && token)
@@ -32,6 +33,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setToken(storedToken)
         setRefreshToken(storedRefreshToken)
         setUser(JSON.parse(storedUser))
+        
+        // Restaurar datos del dashboard si existen
+        const storedDashboardData = localStorage.getItem("dashboard_data")
+        if (storedDashboardData) {
+          setDashboardData(JSON.parse(storedDashboardData))
+        }
+        
         console.log("🔄 Sesión restaurada desde localStorage")
       } else {
         // 🚀 AUTO-LOGIN PARA DESARROLLO
@@ -63,28 +71,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setError(null)
       setIsLoading(true)
       
-      // TODO: Activar cuando el backend esté listo
-      // const response = await authService.login(credentials)
+      console.log('🔐 Intentando login con backend real...', credentials)
+      const response = await authService.login(credentials)
+      console.log('✅ Login exitoso:', response)
       
-      // Por ahora, simular login exitoso
-      const mockUser: User = {
-        user_id: 1,
-        username: credentials.username,
-        name: "Usuario",
-        last_name: "Demo", 
-        email: `${credentials.username}@ejemplo.com`,
-        phone_number: "+52 644 123 4567",
-        role: "student" as UserRole,
-        photo_url: "https://i.pravatar.cc/150?img=1"
-      }
-
-      setUser(mockUser)
-      setToken("mock-token-123")
-      setRefreshToken("mock-refresh-token-123")
-      localStorage.setItem("user", JSON.stringify(mockUser))
+      // Usar datos del backend
+      setUser(response.user)
+      setToken(response.access_token)
+      setRefreshToken(response.refresh_token || null)
+      setDashboardData(response.dashboard_data || null)
       
-      toast.success("Sesión iniciada correctamente")
+      // Guardar en localStorage
+      localStorage.setItem("user", JSON.stringify(response.user))
+      localStorage.setItem("dashboard_data", JSON.stringify(response.dashboard_data))
+      
+      toast.success(`¡Bienvenido ${response.user.name}!`)
+      
     } catch (err: unknown) {
+      console.log('❌ Error de login:', err)
       const authError: AuthError = {
         message: err instanceof Error ? err.message : 'Error al iniciar sesión',
         statusCode: 401,
@@ -148,9 +152,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setToken(null)
       setRefreshToken(null)
       setError(null)
+      setDashboardData(null)
       localStorage.removeItem("user")
       localStorage.removeItem("access_token")
       localStorage.removeItem("refresh_token")
+      localStorage.removeItem("dashboard_data")
       toast.success("Sesión cerrada")
     }
   }
@@ -247,6 +253,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         token,
         refreshToken,
         error,
+        dashboardData,
         
         // Métodos
         login,

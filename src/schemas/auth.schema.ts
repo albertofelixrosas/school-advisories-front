@@ -7,7 +7,7 @@ export const loginSchema = z.object({
     .min(3, "El nombre de usuario debe tener al menos 3 caracteres")
     .max(50, "El nombre de usuario es demasiado largo")
     .regex(/^[a-zA-Z0-9._-]+$/, "El nombre de usuario solo puede contener letras, números, puntos, guiones y guiones bajos"),
-  password: z.string().min(1, "La contraseña es requerida").min(6, "La contraseña debe tener al menos 6 caracteres"),
+  password: z.string().min(1, "La contraseña es requerida"),
 })
 
 export const registerSchema = z
@@ -36,7 +36,6 @@ export const registerSchema = z
     password: z
       .string()
       .min(1, "La contraseña es requerida")
-      .min(6, "La contraseña debe tener al menos 6 caracteres")
       .max(50, "La contraseña es demasiado larga"),
     confirmPassword: z.string().min(1, "Debe confirmar la contraseña"),
   })
