@@ -20,7 +20,7 @@ export interface SubjectDetail {
   schedules?: Array<{
     schedule_id: number;
     day: string;
-    begin_time: string;
+    start_time: string;
     end_time: string;
   }>;
   advisories?: Array<{
@@ -37,6 +37,11 @@ export interface CreateSubjectDto {
 export interface CreateSubjectDetailDto {
   subject_id: number;
   professor_id: number;
+  schedules?: Array<{
+    day: string;
+    start_time: string;
+    end_time: string;
+  }>;
 }
 
 export interface UpdateSubjectDto {

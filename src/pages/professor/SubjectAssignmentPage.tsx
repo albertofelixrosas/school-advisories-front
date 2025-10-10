@@ -52,7 +52,7 @@ function AssignSubjectDialog({ open, onClose, availableSubjects }: AssignSubject
   const [selectedSubject, setSelectedSubject] = useState<number | "">("")
   const [schedules, setSchedules] = useState<Array<{
     day: string;
-    begin_time: string;
+    start_time: string;
     end_time: string;
   }>>([])
   
@@ -69,7 +69,7 @@ function AssignSubjectDialog({ open, onClose, availableSubjects }: AssignSubject
   ]
 
   const handleAddSchedule = () => {
-    setSchedules([...schedules, { day: "MONDAY", begin_time: "08:00", end_time: "09:00" }])
+    setSchedules([...schedules, { day: "MONDAY", start_time: "08:00", end_time: "09:00" }])
   }
 
   const handleScheduleChange = (index: number, field: keyof typeof schedules[0], value: string) => {
@@ -86,7 +86,12 @@ function AssignSubjectDialog({ open, onClose, availableSubjects }: AssignSubject
     if (selectedSubject && user?.user_id) {
       const assignmentData: CreateSubjectDetailDto = {
         subject_id: Number(selectedSubject),
-        professor_id: user.user_id
+        professor_id: user.user_id,
+        schedules: schedules.map(schedule => ({
+          day: schedule.day,
+          start_time: schedule.start_time,
+          end_time: schedule.end_time
+        }))
       }
       
       createAssignmentMutation.mutate(assignmentData, {
@@ -167,8 +172,8 @@ function AssignSubjectDialog({ open, onClose, availableSubjects }: AssignSubject
                   label="Hora Inicio"
                   size="small"
                   fullWidth
-                  value={schedule.begin_time}
-                  onChange={(e) => handleScheduleChange(index, 'begin_time', e.target.value)}
+                  value={schedule.start_time}
+                  onChange={(e) => handleScheduleChange(index, 'start_time', e.target.value)}
                   InputLabelProps={{ shrink: true }}
                 />
               </Box>
@@ -217,6 +222,20 @@ export default function ProfessorSubjectAssignmentPage() {
   const { data: allSubjects, isLoading: subjectsLoading, error: subjectsError } = useSubjects()
   const { data: mySubjects, isLoading: mySubjectsLoading, error: mySubjectsError } = useMySubjects()
   const deleteAssignmentMutation = useDeleteSubjectDetail()
+
+  // Función para traducir días
+  const translateDay = (day: string) => {
+    const dayMap: { [key: string]: string } = {
+      "MONDAY": "Lunes",
+      "TUESDAY": "Martes", 
+      "WEDNESDAY": "Miércoles",
+      "THURSDAY": "Jueves",
+      "FRIDAY": "Viernes",
+      "SATURDAY": "Sábado",
+      "SUNDAY": "Domingo"
+    }
+    return dayMap[day] || day
+  }
 
   // Filtrar materias disponibles (que no tenga asignadas)
   const availableSubjects = allSubjects?.filter(subject => 
@@ -382,7 +401,7 @@ export default function ProfessorSubjectAssignmentPage() {
                               <Chip
                                 key={index}
                                 size="small"
-                                label={`${schedule.day} ${schedule.begin_time}-${schedule.end_time}`}
+                                label={`${translateDay(schedule.day)} ${schedule.start_time}-${schedule.end_time}`}
                                 variant="outlined"
                                 color="primary"
                               />
