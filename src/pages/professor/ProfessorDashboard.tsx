@@ -78,7 +78,7 @@ export default function ProfessorDashboard() {
           Dashboard del Profesor
         </Typography>
         <Typography variant="body1" color="text.secondary">
-          Bienvenido, {user?.full_name || user?.name} {user?.last_name}
+          Bienvenido, {user?.name} {user?.last_name}
         </Typography>
       </Box>
 

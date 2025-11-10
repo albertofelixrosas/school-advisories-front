@@ -88,7 +88,7 @@ export default function Navbar({ onMenuClick }: NavbarProps) {
         </IconButton>
 
         <IconButton onClick={handleMenu} color="inherit">
-          {user?.avatar ? <Avatar src={user.avatar} sx={{ width: 32, height: 32 }} /> : <AccountCircle />}
+          {user?.photo_url ? <Avatar src={user.photo_url} sx={{ width: 32, height: 32 }} /> : <AccountCircle />}
         </IconButton>
 
         <Menu

@@ -1,20 +1,11 @@
 import type { ApiError, ApiRequestConfig } from '../types/api.types';
-
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+import { apiClientInstance } from '../lib/axios';
 
 class ApiClient {
-  private baseURL: string;
-
-  constructor(baseURL: string = API_BASE_URL) {
-    this.baseURL = baseURL;
-  }
-
   private async request<T>(
     endpoint: string,
     config: ApiRequestConfig
   ): Promise<T> {
-    const url = `${this.baseURL}${endpoint}`;
-    
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
       ...config.headers,
@@ -27,21 +18,14 @@ class ApiClient {
     }
 
     try {
-      const response = await fetch(url, {
+      const response = await apiClientInstance.request<T>({
+        url: endpoint,
         method: config.method,
         headers,
-        body: config.body ? JSON.stringify(config.body) : undefined,
+        data: config.body,
       });
 
-      if (!response.ok) {
-        const errorData: ApiError = await response.json().catch(() => ({
-          message: 'Error de red',
-          statusCode: response.status,
-        }));
-        throw errorData;
-      }
-
-      return await response.json();
+      return response.data;
     } catch (error) {
       if (error instanceof Error) {
         throw {

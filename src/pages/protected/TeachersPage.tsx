@@ -79,7 +79,7 @@ export default function TeachersPage() {
         {filteredTeachers && filteredTeachers.length > 0 ? (
           filteredTeachers.map((teacher) => (
             <Card
-              key={teacher.id}
+              key={teacher.user_id}
               sx={{
                 p: 3,
                 height: "100%",
@@ -94,7 +94,7 @@ export default function TeachersPage() {
             >
               <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
                 <Avatar
-                  src={teacher.avatar}
+                  src={teacher.photo_url || undefined}
                   sx={{
                     width: 64,
                     height: 64,
@@ -122,14 +122,15 @@ export default function TeachersPage() {
               <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 3 }}>
                 <School fontSize="small" color="action" />
                 <Typography variant="body2" color="text.secondary">
-                  {teacher.subjectsCount || 0} materias
+                  {/* TODO: agregar subjectsCount al tipo User o calcularlo */}
+                  0 materias
                 </Typography>
               </Box>
 
               <Button
                 variant="outlined"
                 fullWidth
-                onClick={() => navigate(`/advisories?teacher=${teacher.id}`)}
+                onClick={() => navigate(`/advisories?teacher=${teacher.user_id}`)}
                 sx={{ mt: "auto" }}
               >
                 Ver Asesorías

@@ -1,5 +1,5 @@
-// Re-export nuevos tipos de user
-export type { User, UserRole } from './user.types'
+// Re-export tipos del backend
+export * from './backend.types'
 // Re-export tipos de auth
 export type { LoginDto, AuthError, AuthState } from './auth.types'
 // Re-export tipos de API

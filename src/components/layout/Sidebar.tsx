@@ -22,7 +22,6 @@ import {
   AdminPanelSettings,
   Dashboard,
   Event,
-  Assignment,
   AccountTree,
   Settings,
 } from "@mui/icons-material";
